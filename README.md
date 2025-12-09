@@ -9,8 +9,8 @@ This module is meant to work with devices that have the following PCI IDs:
 
 ## Installation
 
-1. Install the [dkms framework](https://github.com/dell/dkms), possibly by
-   installing a package for the distribution in use.
+1. Install the [dkms framework](https://github.com/dkms-project/dkms), possibly
+   by installing a package for the distribution in use.
 
 2. Install a compilation toolchain and kernel build system for the kernel in
    use. If dkms was installed using a packaging system in the previous step,
