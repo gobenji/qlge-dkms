@@ -4654,7 +4654,7 @@ static void qlge_remove(struct pci_dev *pdev)
 	struct devlink *devlink = priv_to_devlink(qdev);
 
 	devlink_unregister(devlink);
-	del_timer_sync(&qdev->timer);
+	timer_delete_sync(&qdev->timer);
 	qlge_cancel_all_work_sync(qdev);
 	unregister_netdev(ndev);
 	qlge_release_all(pdev);
@@ -4702,7 +4702,7 @@ static pci_ers_result_t qlge_io_error_detected(struct pci_dev *pdev,
 		return PCI_ERS_RESULT_CAN_RECOVER;
 	case pci_channel_io_frozen:
 		netif_device_detach(ndev);
-		del_timer_sync(&qdev->timer);
+		timer_delete_sync(&qdev->timer);
 		if (netif_running(ndev))
 			qlge_eeh_close(ndev);
 		pci_disable_device(pdev);
@@ -4710,7 +4710,7 @@ static pci_ers_result_t qlge_io_error_detected(struct pci_dev *pdev,
 	case pci_channel_io_perm_failure:
 		dev_err(&pdev->dev,
 			"%s: pci_channel_io_perm_failure.\n", __func__);
-		del_timer_sync(&qdev->timer);
+		timer_delete_sync(&qdev->timer);
 		qlge_eeh_close(ndev);
 		set_bit(QL_EEH_FATAL, &qdev->flags);
 		return PCI_ERS_RESULT_DISCONNECT;
@@ -4786,7 +4786,7 @@ static int __maybe_unused qlge_suspend(struct device *dev_d)
 	qdev = pci_get_drvdata(pdev);
 	ndev = qdev->ndev;
 	netif_device_detach(ndev);
-	del_timer_sync(&qdev->timer);
+	timer_delete_sync(&qdev->timer);
 
 	if (netif_running(ndev)) {
 		err = qlge_adapter_down(qdev);
