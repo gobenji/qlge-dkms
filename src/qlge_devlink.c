@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
+#include "compat.h"
 #include "qlge.h"
 #include "qlge_devlink.h"
 
@@ -126,9 +127,8 @@ long qlge_health_create_reporters(struct qlge_adapter *priv)
 	long err = 0;
 
 	devlink = priv_to_devlink(priv);
-	priv->reporter =
-		devlink_health_reporter_create(devlink, &qlge_reporter_ops,
-					       0, priv);
+	priv->reporter = compat_devlink_health_reporter_create(
+		devlink, &qlge_reporter_ops, 0, priv);
 	if (IS_ERR(priv->reporter)) {
 		err = PTR_ERR(priv->reporter);
 		netdev_warn(priv->ndev,
